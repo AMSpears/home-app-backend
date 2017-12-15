@@ -19,24 +19,24 @@ const HomeSchema = new mongoose.Schema({
 	}
 })
 
-const UserSchema = new mongoose.Schema({
-	email: String,
-	password: String,
-	created_homes: [],
-	followed_homes: [FollowedHomeSchema]
-})
-
-const FollowedHomeSchema = new mongoose.Schema({
+const FollowedHomesSchema = new mongoose.Schema({
 	home_id: String,
 	note: String
 })
 
+const UserSchema = new mongoose.Schema({
+	email: String,
+	password: String,
+	created_homes: [],
+	followed_homes: [FollowedHomesSchema]
+})
+
 const Home = mongoose.model('Home', HomeSchema)
 const User = mongoose.model('User', UserSchema)
-const FollowedHome = mongoose.model('FollowHome', FollowedHomeSchema)
+const FollowedHomes = mongoose.model('FollowHomes', FollowedHomesSchema)
 
 module.exports = {
 	Home,
 	User,
-	FollowedHome
+	FollowedHomes
 }
