@@ -2,16 +2,15 @@
 
 const express = require('express')
 const parser = require('body-parser')
-var jwt = require("jwt-simple");  
+var jwt = require("jwt-simple");
 const cors = require('cors')
 const passport = require('passport')
 var auth = require("./auth.js")();
 var cfg = require("./config.js");
-var users = require("./db/users.js");
 
 const Home = require('./db/schema').Home
 const User = require('./db/schema').User
-const FollowedHomes = require('./db/schema').FollowedHomes
+const FollowedHome = require('./db/schema').FollowedHome
 
 const app = express()
 
@@ -25,29 +24,23 @@ app.get('/', (req, res) => {
 })
 
 // sends back the user's info.  This private route will only run for authenticated token and you can use the req.user.id object inside this route, because this data will be available if you send the right token
-app.get("/user", auth.authenticate(), function(req, res) {
-    res.json(users[req.user.id]);
-});
+// app.get("/user", auth.authenticate(), function(req, res) {
+//     res.json(users[req.user.id]);
+// });
 
 //This route will be responsible for generating an encoded token with a payload, given to the user that sends the right e-mail and password via req.body.email and req.body.password in the request.
 app.post("/token", function(req, res) {
     if (req.body.email && req.body.password) {
-        var email = req.body.email;
-        var password = req.body.password;
-        var user = users.find(function(u) {
-            return u.email === email && u.password === password;
-        });
-        if (user) {
-            var payload = {
-                id: user.id
-            };
+        User.findOne({email: req.body.email, password: req.body.password})
+				.then(user => {
+					if (user) {
+            var payload = {id: user.id};
             var token = jwt.encode(payload, cfg.jwtSecret);
-            res.json({
-                token: token
-            });
-        } else {
+            res.json({token: token});
+	        } else {
             res.sendStatus(401);
-        }
+	        }
+				})
     } else {
         res.sendStatus(401);
     }

@@ -3,7 +3,6 @@ const mongoose = require('./connection')
 const HomeSchema = new mongoose.Schema({
 	owner_id: String,
 	street_address: String,
-	unit: String,
 	state: String,
 	city: String,
 	zipcode: Number,
@@ -19,7 +18,7 @@ const HomeSchema = new mongoose.Schema({
 	}
 })
 
-const FollowedHomesSchema = new mongoose.Schema({
+const FollowedHomeSchema = new mongoose.Schema({
 	home_id: String,
 	note: String
 })
@@ -28,15 +27,17 @@ const UserSchema = new mongoose.Schema({
 	email: String,
 	password: String,
 	created_homes: [],
-	followed_homes: [FollowedHomesSchema]
+	followed_homes: [FollowedHomeSchema]
 })
+
+
 
 const Home = mongoose.model('Home', HomeSchema)
 const User = mongoose.model('User', UserSchema)
-const FollowedHomes = mongoose.model('FollowHomes', FollowedHomesSchema)
+const FollowedHome = mongoose.model('FollowHomes', FollowedHomeSchema)
 
 module.exports = {
 	Home,
 	User,
-	FollowedHomes
+	FollowedHome
 }
