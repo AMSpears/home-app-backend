@@ -7,10 +7,10 @@ const FollowedHome = require('./schema').FollowedHome
 
 var users = [{
     email: "john@mail.com",
-    password: "john123"
+    password: "john1234"
 }, {
     email: "sarah@mail.com",
-    password: "sarah123"
+    password: "sarah1234"
 }];
 
 
