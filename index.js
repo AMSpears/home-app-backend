@@ -24,12 +24,12 @@ app.get('/', (req, res) => {
 })
 
 // sends back the user's info.  This private route will only run for authenticated token and you can use the req.user.id object inside this route, because this data will be available if you send the right token
-// app.get("/user", auth.authenticate(), function(req, res) {
-//     res.json(users[req.user.id]);
-// });
+app.get("/user", auth.authenticate(), function(req, res) {
+    res.json(users[req.user.id]);
+});
 
 //This route will be responsible for generating an encoded token with a payload, given to the user that sends the right e-mail and password via req.body.email and req.body.password in the request.
-app.post("/token", function(req, res) {
+app.post("/login", function(req, res) {
     if (req.body.email && req.body.password) {
         User.findOne({email: req.body.email, password: req.body.password})
 				.then(user => {
@@ -46,6 +46,26 @@ app.post("/token", function(req, res) {
     }
 });
 
+// a bit repetative from login.  might want to abstract out
+app.post("/signup", function(req, res) {
+    if (req.body.email && req.body.password) {
+        User.create({email: req.body.email, password: req.body.password})
+				.then(user => {
+					if (user) {
+            var payload = {id: user.id};
+            var token = jwt.encode(payload, cfg.jwtSecret);
+            res.json({token: token});
+	        } else {
+            res.sendStatus(401);
+	        }
+				})
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+
+
 app.get('/api/homes', (req, res) => {
 	Home.find()
 		.then(home => {
@@ -54,12 +74,39 @@ app.get('/api/homes', (req, res) => {
 		.catch(err => console.log(err))
 })
 
-app.get('/api/homes/:id', (req, res) => {
-	Home.create(req.body)
-		.then(home => {
+
+// works!  but need to think through what we want to actually send back if there is an error!
+app.post('/api/homes', (req, res) => {
+	var userid = jwt.decode(req.body.token, cfg.jwtSecret).id
+	User.findById(userid)
+	.then(user => {
+		if (user) {
+			Home.create({
+				owner_id: userid,
+				street_address: req.body.street_address,
+				state: req.body.state,
+				city: req.body.city,
+				zipcode: req.body.zipcode,
+				num_bed: req.body.num_bed,
+				num_bath: req.body.num_bath,
+				sq_ft: req.body.sq_ft,
+				price_range: req.body.price_range,
+				img_url: req.body.img_url,
+				type_rent_buy: req.body.type_rent_buy
+			})
+			.then(home => {
 			res.json(home)
+			})
+			.catch(err => {
+				res.sendStatus(401).json(err)
+			})
+		} else {
+			res.sendStatus(401);
+		}
+	})
+	.catch(err => {
+		res.sendStatus(401).json(err)
 		})
-		.catch(err => console.log(err))
 })
 
 app.get('/api/homes/:id', (req, res) => {
