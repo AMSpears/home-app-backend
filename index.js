@@ -29,6 +29,7 @@ app.get("/user", auth.authenticate(), function(req, res) {
 });
 
 //This route will be responsible for generating an encoded token with a payload, given to the user that sends the right e-mail and password via req.body.email and req.body.password in the request.
+// ALSO, will need to update if we are going to hash the password (which we should)
 app.post("/login", function(req, res) {
     if (req.body.email && req.body.password) {
         User.findOne({email: req.body.email, password: req.body.password})
@@ -46,7 +47,7 @@ app.post("/login", function(req, res) {
     }
 });
 
-// a bit repetative from login.  might want to abstract out
+// a bit repetative from login.  might want to abstract out.  ALSO, SHOULD WE HASH THE PASSWORD?
 app.post("/signup", function(req, res) {
     if (req.body.email && req.body.password) {
         User.create({email: req.body.email, password: req.body.password})
@@ -117,6 +118,7 @@ app.get('/api/homes/:id', (req, res) => {
 		.catch(err => console.log(err))
 })
 
+//need to update so that only if the token matches the home's owner can the user delete the home
 app.delete('/api/homes/:id', (req, res) => {
 	Home.findByIdAndRemove(req.params.id)
 		.then(home => {
