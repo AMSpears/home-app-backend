@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema({
 
 const Home = mongoose.model('Home', HomeSchema)
 const User = mongoose.model('User', UserSchema)
-const FollowedHomes = mongoose.model('FollowHomes', FollowedHomesSchema)
+const FollowedHomes = mongoose.model('FollowedHomes', FollowedHomesSchema)
 
 module.exports = {
 	Home,
