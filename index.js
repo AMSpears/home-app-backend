@@ -48,26 +48,32 @@ app.post("/login", function(req, res) {
     }
 });
 
-// a bit repetative from login.  might want to abstract out.  also sends back a token if the login credentials match
+
 app.post("/signup", function(req, res) {
     if (req.body.email && req.body.password) {
-			bcrypt.hash(req.body.password, 10, function(err, hash) {
-				User.create({email: req.body.email, password: hash})
-				.then(user => {
-					if (user) {
-						var payload = {id: user.id};
-						var token = jwt.encode(payload, cfg.jwtSecret);
-						res.json({token: token});
-					} else {
-						res.sendStatus(401);
+			User.findOne({email: req.body.email})
+			.then(user => {
+				if (user) {
+					res.sendStatus(208);
+				} else {
+						bcrypt.hash(req.body.password, 10, function(err, hash) {
+							User.create({email: req.body.email, password: hash})
+							.then(user => {
+								if (user) {
+									var payload = {id: user.id};
+									var token = jwt.encode(payload, cfg.jwtSecret);
+									res.json({token: token});
+								} else {
+									res.sendStatus(401);
+								}
+							})
+						});
 					}
-				})
-			});
+			})
     } else {
         res.sendStatus(401);
     }
-});
-
+})
 
 
 app.get('/api/homes', (req, res) => {
@@ -79,7 +85,6 @@ app.get('/api/homes', (req, res) => {
 })
 
 
-// works!  but need to think through what we want to actually send back if there is an error!
 app.post('/api/homes', (req, res) => {
 	var userid = jwt.decode(req.body.token, cfg.jwtSecret).id
 	User.findById(userid)
