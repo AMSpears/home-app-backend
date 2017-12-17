@@ -2,11 +2,12 @@
 
 const express = require('express')
 const parser = require('body-parser')
-var jwt = require("jwt-simple");
+const jwt = require("jwt-simple");
 const cors = require('cors')
 const passport = require('passport')
-var auth = require("./auth.js")();
-var cfg = require("./config.js");
+const bcrypt = require('bcrypt');
+const auth = require("./auth.js")();
+const cfg = require("./config.js");
 
 const Home = require('./db/schema').Home
 const User = require('./db/schema').User
@@ -23,23 +24,23 @@ app.get('/', (req, res) => {
 	res.send('hello world!')
 })
 
-// sends back the user's info.  This private route will only run for authenticated token and you can use the req.user.id object inside this route, because this data will be available if you send the right token
-app.get("/user", auth.authenticate(), function(req, res) {
-    res.json(users[req.user.id]);
-});
-
 //This route will be responsible for generating an encoded token with a payload, given to the user that sends the right e-mail and password via req.body.email and req.body.password in the request.
-// ALSO, will need to update if we are going to hash the password (which we should)
 app.post("/login", function(req, res) {
     if (req.body.email && req.body.password) {
-        User.findOne({email: req.body.email, password: req.body.password})
+        User.findOne({email: req.body.email})
 				.then(user => {
 					if (user) {
-            var payload = {id: user.id};
-            var token = jwt.encode(payload, cfg.jwtSecret);
-            res.json({token: token});
+						bcrypt.compare(req.body.password, user.password, function(err, response) {
+						  if(response) {
+								var payload = {id: user.id};
+								var token = jwt.encode(payload, cfg.jwtSecret);
+								res.json({token: token});
+						  } else {
+						   res.sendStatus(500);
+						  }
+						});
 	        } else {
-            res.sendStatus(401);
+            res.sendStatus(200);
 	        }
 				})
     } else {
@@ -47,19 +48,21 @@ app.post("/login", function(req, res) {
     }
 });
 
-// a bit repetative from login.  might want to abstract out.  ALSO, SHOULD WE HASH THE PASSWORD?
+// a bit repetative from login.  might want to abstract out.  also sends back a token if the login credentials match
 app.post("/signup", function(req, res) {
     if (req.body.email && req.body.password) {
-        User.create({email: req.body.email, password: req.body.password})
+			bcrypt.hash(req.body.password, 10, function(err, hash) {
+				User.create({email: req.body.email, password: hash})
 				.then(user => {
 					if (user) {
-            var payload = {id: user.id};
-            var token = jwt.encode(payload, cfg.jwtSecret);
-            res.json({token: token});
-	        } else {
-            res.sendStatus(401);
-	        }
+						var payload = {id: user.id};
+						var token = jwt.encode(payload, cfg.jwtSecret);
+						res.json({token: token});
+					} else {
+						res.sendStatus(401);
+					}
 				})
+			});
     } else {
         res.sendStatus(401);
     }
