@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost/home', { userMongoClient: true })
 
 if (process.env.NODE_ENV == "production") {
-  mongoose.connect(process.env.MLAB_URL)
+  mongoose.connect('mongodb://project3team:project3@ds161146.mlab.com:61146/home-app-db', { userMongoClient: true })
 } else {
   mongoose.connect('mongodb://localhost/home', { userMongoClient: true });
 }
