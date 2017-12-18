@@ -10,7 +10,8 @@ let home_1 = new Home({
 	num_bath: 1,
 	sq_ft: 815,
 	price_range: 1540,
-	img_url: 'https://photos.zillowstatic.com/p_f/ISyvirdmiwi5yw1000000000.jpg'
+	img_url: 'https://photos.zillowstatic.com/p_f/ISyvirdmiwi5yw1000000000.jpg',
+	type_rent_buy: 'Rent'
 })
 
 let home_2 = new Home({
@@ -23,7 +24,8 @@ let home_2 = new Home({
 	num_bath: 2,
 	sq_ft: 973,
 	price_range: 1865,
-	img_url: 'https://photos.zillowstatic.com/p_f/ISmai7lccg4ntc0000000000.jpg'
+	img_url: 'https://photos.zillowstatic.com/p_f/ISmai7lccg4ntc0000000000.jpg',
+	type_rent_buy: 'Rent'
 })
 
 let home_3 = new Home({
@@ -36,7 +38,8 @@ let home_3 = new Home({
 	num_bath: 1,
 	sq_ft: 699,
 	price_range: 1995,
-	img_url: 'https://photos.zillowstatic.com/p_f/ISir8or0w3ar7h1000000000.jpg'
+	img_url: 'https://photos.zillowstatic.com/p_f/ISir8or0w3ar7h1000000000.jpg',
+	type_rent_buy: 'Rent'
 })
 
 let home_4 = new Home({
@@ -49,7 +52,8 @@ let home_4 = new Home({
 	num_bath: 2,
 	sq_ft: 947,
 	price_range: 2825,
-	img_url: 'https://photos.zillowstatic.com/p_f/ISivvworzo5c1y0000000000.jpg'
+	img_url: 'https://photos.zillowstatic.com/p_f/ISivvworzo5c1y0000000000.jpg',
+	type_rent_buy: 'Rent'
 })
 
 let home_5 = new Home({
@@ -62,7 +66,8 @@ let home_5 = new Home({
 	num_bath: 2,
 	sq_ft: 1854,
 	price_range: 3000,
-	img_url: 'https://photos.zillowstatic.com/p_f/ISmig3nwlfd1os0000000000.jpg'
+	img_url: 'https://photos.zillowstatic.com/p_f/ISmig3nwlfd1os0000000000.jpg',
+	type_rent_buy: 'Buy'
 })
 
 let homes = [home_1, home_2, home_3, home_4, home_5]
