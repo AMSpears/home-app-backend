@@ -127,7 +127,7 @@ app.get("/api/homes/:id", (req, res) => {
 app.put("/api/homes/:id", (req, res) => {
   let userid = jwt.decode(req.body.token, cfg.jwtSecret).id;
   Home.findById(req.params.id)
-    .then((home => {
+    .then(home => {
       if (home.owner_id === userid) {
         Home.update({
           street_address: req.body.street_address,
