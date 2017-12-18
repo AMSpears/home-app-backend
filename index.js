@@ -75,15 +75,30 @@ app.post("/signup", function(req, res) {
 });
 
 app.get("/api/homes", (req, res) => {
-  Home.find()
-    .then(home => {
-      res.json(home);
-    })
-    .catch(err => console.log(err));
+  if (req.headers.token.length > 0) {
+    let userid = jwt.decode(req.headers.token, cfg.jwtSecret).id;
+    Home.find()
+      .then(homes => {
+        res.json({
+          homes: homes,
+          userid: userid
+        });
+      })
+      .catch(err => console.log(err));
+  } else {
+    Home.find()
+      .then(homes => {
+        res.json({
+          homes: homes,
+          userid: ""
+        });
+      })
+      .catch(err => console.log(err));
+  }
 });
 
 app.post("/api/homes", (req, res) => {
-  var userid = jwt.decode(req.body.token, cfg.jwtSecret).id;
+  let userid = jwt.decode(req.headers.token, cfg.jwtSecret).id;
   User.findById(userid)
     .then(user => {
       if (user) {
@@ -125,7 +140,7 @@ app.get("/api/homes/:id", (req, res) => {
 });
 
 app.put("/api/homes/:id", (req, res) => {
-  let userid = jwt.decode(req.body.token, cfg.jwtSecret).id;
+  let userid = jwt.decode(req.headers.token, cfg.jwtSecret).id;
   Home.findById(req.params.id)
     .then(home => {
       if (home.owner_id === userid) {
