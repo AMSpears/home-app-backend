@@ -3,7 +3,7 @@ const mongoose = require('./connection')
 const HomeSchema = new mongoose.Schema({
 	owner_id: String,
 	street_address: String,
-	Unit: String,
+	unit: String,
 	state: String,
 	city: String,
 	zipcode: Number,
