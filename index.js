@@ -171,11 +171,18 @@ app.put("/api/homes/:id", (req, res) => {
     });
 });
 
-//need to update so that only if the token matches the home's owner can the user delete the home
 app.delete("/api/homes/:id", (req, res) => {
-  Home.findByIdAndRemove(req.params.id)
+  let userid = jwt.decode(req.headers.token, cfg.jwtSecret).id;
+  Home.findById(req.params.id)
     .then(home => {
-      res.json(home);
+      if (home.owner_id === userid) {
+        home.remove()
+        .then(() => {
+          res.json(200);
+        })
+        .catch(err => console.log(err));
+      }
+
     })
     .catch(err => console.log(err));
 });
