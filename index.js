@@ -38,15 +38,15 @@ app.post("/login", function(req, res) {
             var token = jwt.encode(payload, cfg.jwtSecret);
             res.json({ token: token });
           } else {
-            res.sendStatus(500);
+            res.sendStatus("The server did not respond.");
           }
         });
       } else {
-        res.sendStatus(200);
+        res.sendStatus("Your passwords do not match.");
       }
     });
   } else {
-    res.sendStatus(401);
+    res.sendStatus("User not found.");
   }
 });
 
@@ -54,7 +54,7 @@ app.post("/signup", function(req, res) {
   if (req.body.email && req.body.password) {
     User.findOne({ email: req.body.email }).then(user => {
       if (user) {
-        res.sendStatus(208);
+        res.sendStatus("User found!");
       } else {
         bcrypt.hash(req.body.password, 10, function(err, hash) {
           User.create({ email: req.body.email, password: hash }).then(user => {
@@ -63,14 +63,14 @@ app.post("/signup", function(req, res) {
               var token = jwt.encode(payload, cfg.jwtSecret);
               res.json({ token: token });
             } else {
-              res.sendStatus(401);
+              res.sendStatus("The server did not respond.");
             }
           });
         });
       }
     });
   } else {
-    res.sendStatus(401);
+    res.sendStatus("User email and password combination not found.");
   }
 });
 
@@ -118,16 +118,21 @@ app.post("/api/homes", (req, res) => {
         })
           .then(home => {
             res.json(home);
+            console.log("test");
+            console.log(user);
+            console.log(home);
           })
           .catch(err => {
+            console.log(user);
+            console.log(home);
             res.sendStatus(401).json(err);
           });
       } else {
-        res.sendStatus(401);
+        res.sendStatus(402);
       }
     })
     .catch(err => {
-      res.sendStatus(401).json(err);
+      res.sendStatus(403).json(err);
     });
 });
 
