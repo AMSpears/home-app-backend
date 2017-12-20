@@ -144,12 +144,13 @@ app.get("/api/homes/:id", (req, res) => {
     .catch(err => console.log(err));
 });
 
+
 app.put("/api/homes/:id", (req, res) => {
   let userid = jwt.decode(req.headers.token, cfg.jwtSecret).id;
   Home.findById(req.params.id)
     .then(home => {
       if (home.owner_id === userid) {
-        Home.update({
+        home.update({
           street_address: req.body.street_address,
           unit: req.body.unit,
           state: req.body.state,
@@ -158,29 +159,37 @@ app.put("/api/homes/:id", (req, res) => {
           num_bed: req.body.num_bed,
           num_bath: req.body.num_bath,
           sq_ft: req.body.sq_ft,
-          price_range: req.body.img_url,
+          price_range: req.body.price_range,
+          img_url: req.body.img_url,
           type_rent_buy: req.body.type_rent_buy
         })
-          .then(home => {
-            res.json(home);
-          })
-          .catch(err => {
-            res.sendStatus(402).json(err);
-          });
-      } else {
-        res.sendStatus(402);
-      }
-    })
-    .catch(err => {
-      res.sendStatus(402).json(err);
-    });
+        .then(home => {
+          console.log(home)
+          res.json(home);
+        })
+        .catch(err => {
+          res.sendStatus(402).json(err);
+        });
+    }
+    else {
+      res.sendStatus(402);
+    }
+  })
+    .catch(err => console.log(err));
 });
 
-//need to update so that only if the token matches the home's owner can the user delete the home
 app.delete("/api/homes/:id", (req, res) => {
-  Home.findByIdAndRemove(req.params.id)
+  let userid = jwt.decode(req.headers.token, cfg.jwtSecret).id;
+  Home.findById(req.params.id)
     .then(home => {
-      res.json(home);
+      if (home.owner_id === userid) {
+        home.remove()
+        .then(() => {
+          res.json(200);
+        })
+        .catch(err => console.log(err));
+      }
+
     })
     .catch(err => console.log(err));
 });

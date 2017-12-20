@@ -58,7 +58,7 @@ let home_4 = new Home({
 
 let home_5 = new Home({
   street_address: "112 E Montgomery St",
-  unit: "none",
+  unit: "",
   city: "Baltimore",
   state: "MD",
   zipcode: 21230,
