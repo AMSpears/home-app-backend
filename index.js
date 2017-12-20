@@ -189,6 +189,6 @@ app.delete("/api/homes/:id", (req, res) => {
     .catch(err => console.log(err));
 });
 
-app.listen(3001, () => {
+app.listen(process.env.PORT || 3001, () => {
   console.log("app listening on port 3001");
 });
