@@ -38,15 +38,15 @@ app.post("/login", function(req, res) {
             var token = jwt.encode(payload, cfg.jwtSecret);
             res.json({ token: token });
           } else {
-            res.sendStatus("The server did not respond.");
+            res.sendStatus(500);
           }
         });
       } else {
-        res.sendStatus("Your passwords do not match.");
+        res.sendStatus(200);
       }
     });
   } else {
-    res.sendStatus("User not found.");
+    res.sendStatus(401);
   }
 });
 
@@ -54,23 +54,23 @@ app.post("/signup", function(req, res) {
   if (req.body.email && req.body.password) {
     User.findOne({ email: req.body.email }).then(user => {
       if (user) {
-        res.sendStatus("User found!");
+        res.sendStatus(208);
       } else {
         bcrypt.hash(req.body.password, 10, function(err, hash) {
           User.create({ email: req.body.email, password: hash }).then(user => {
             if (user) {
               var payload = { id: user.id };
               var token = jwt.encode(payload, cfg.jwtSecret);
-              res.sendStatus(202).json({ token: token });
+              res.json({ token: token });
             } else {
-              res.sendStatus("The server did not respond.");
+              res.sendStatus(401);
             }
           });
         });
       }
     });
   } else {
-    res.sendStatus("User email and password combination not found.");
+    res.sendStatus(401);
   }
 });
 
@@ -118,21 +118,16 @@ app.post("/api/homes", (req, res) => {
         })
           .then(home => {
             res.json(home);
-            console.log("test");
-            console.log(user);
-            console.log(home);
           })
           .catch(err => {
-            console.log(user);
-            console.log(home);
             res.sendStatus(401).json(err);
           });
       } else {
-        res.sendStatus(402);
+        res.sendStatus(401);
       }
     })
     .catch(err => {
-      res.sendStatus(403).json(err);
+      res.sendStatus(401).json(err);
     });
 });
 
