@@ -61,8 +61,7 @@ app.post("/signup", function(req, res) {
             if (user) {
               var payload = { id: user.id };
               var token = jwt.encode(payload, cfg.jwtSecret);
-              res.json({ token: token });
-              res.sendStatus("Signed in!");
+              res.sendStatus(202).json({ token: token });
             } else {
               res.sendStatus("The server did not respond.");
             }
