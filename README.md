@@ -54,3 +54,4 @@ Allow users to track homes they are interested in
 Allow users to write private personalized notes on specific homes
 Filter homes by interest
 Add S3 image uploading
+Implement smarter form input processing (for commas, etc.)
