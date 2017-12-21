@@ -8,24 +8,36 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const auth = require("./auth.js")();
 const cfg = require("./config.js");
-
 const Home = require("./db/schema").Home;
 const User = require("./db/schema").User;
 const FollowedHome = require("./db/schema").FollowedHome;
-
 const app = express();
 
 app.use(parser.json());
 app.use(auth.initialize());
 
-app.use(cors());
+let cors_list;
+
+if (process.env.NODE_ENV === "production") {
+  cors_list = {
+    origin: "http://home-finder.surge.sh/",
+    default: "http://home-finder.surge.sh/"
+  };
+} else {
+  cors_list = {
+    origin: "http://localhost:3000",
+    default: "http://localhost:3000"
+  };
+}
+
+app.use(cors(cors_list));
 
 app.get("/", (req, res) => {
   res.send("hello world!");
 });
 
 //This route will be responsible for generating an encoded token with a payload, given to the user that sends the right e-mail and password via req.body.email and req.body.password in the request.
-app.post("/login", function(req, res) {
+app.post("/api/login", function(req, res) {
   if (req.body.email && req.body.password) {
     User.findOne({ email: req.body.email }).then(user => {
       if (user) {
@@ -50,7 +62,7 @@ app.post("/login", function(req, res) {
   }
 });
 
-app.post("/signup", function(req, res) {
+app.post("/api/signup", function(req, res) {
   if (req.body.email && req.body.password) {
     User.findOne({ email: req.body.email }).then(user => {
       if (user) {

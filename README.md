@@ -22,9 +22,9 @@ HTML
 
 JavaScript
 
-Dependencies Frontend: Axios React React Dom React Google Maps React Router Dom React Scripts
+Dependencies Front-end: Axios React React Dom React Google Maps React Router Dom React Scripts
 
-Dependencies Backend: Bcrypt Body Parser Cors Express JWT-simple Method-override Mongoose Passport
+Dependencies Back-end: Bcrypt Body Parser Cors Express JWT-simple Method-override Mongoose Passport
 
 ## Approach Taken
 
@@ -41,17 +41,22 @@ Google Maps API
 
 ## Installation
 
-Fork or Clone frontend and backend repositories
-Run npm install
-Ensure BackendVariable.js file exports the right location depending on where you would like to run the app
-Start mongo
-Run npm start
+-Fork or Clone front-end and back-end repositories
+-Run npm install
+-Ensure BackendVariable.js file exports the right location depending on where you would like to run the back-end
+-Start mongo
+-Remember to whitelist desired front-end in the index.js back-end file
+-Run npm start
 
 ## Future Features
 
-Pull in other APIS (Yelp, Zillow, etc...)
-Allow users to track homes they are interested in
-Allow users to write private personalized notes on specific homes
-Filter homes by interest
-Add S3 image uploading
-Implement smarter form input processing (for commas, etc.)
+-Pull in other APIS (Yelp, Zillow, etc...)
+-Allow users to track homes they are interested in
+-Allow users to write private personalized notes on specific homes
+-Filter homes by interest
+-Add S3 image uploading
+-Implement smarter form input processing (for commas, etc.)
+
+## Acknowledgements
+
+https://www.freelogodesign.org/
