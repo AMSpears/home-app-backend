@@ -42,7 +42,7 @@ app.post("/login", function(req, res) {
           }
         });
       } else {
-        res.sendStatus(200);
+        res.sendStatus(500);
       }
     });
   } else {
@@ -54,7 +54,7 @@ app.post("/signup", function(req, res) {
   if (req.body.email && req.body.password) {
     User.findOne({ email: req.body.email }).then(user => {
       if (user) {
-        res.sendStatus(208);
+        res.sendStatus(500);
       } else {
         bcrypt.hash(req.body.password, 10, function(err, hash) {
           User.create({ email: req.body.email, password: hash }).then(user => {
