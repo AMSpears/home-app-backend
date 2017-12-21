@@ -20,8 +20,8 @@ let cors_list;
 
 if (process.env.NODE_ENV === "production") {
   cors_list = {
-    origin: "http://home-finder.surge.sh/",
-    default: "http://home-finder.surge.sh/"
+    origin: "http://home-finder.surge.sh",
+    default: "http://home-finder.surge.sh"
   };
 } else {
   cors_list = {
